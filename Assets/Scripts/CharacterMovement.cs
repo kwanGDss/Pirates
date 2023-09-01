@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 3.0f;
     private float lastHorizonalInput = 0f;
     private bool isJumping = false;
+    private int jumpCount = 0;
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -70,9 +71,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && !isJumping)
+        if (Input.GetButtonDown("Jump") && jumpCount < 2)
         {
             isJumping = true;
+            jumpCount++;
+            if(jumpCount == 2)
+            {
+                animator.SetBool("IsDoubleJumping", true);
+            }
+
             animator.SetBool("IsJumpingUp", true);
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
@@ -86,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool("IsJumpingUp", false);
             animator.SetBool("IsJumpingDown", true);
+            animator.SetBool("IsDoubleJumping", false);
         }
     }
 
@@ -94,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag != "Ground") return;
 
         isJumping = false;
+        jumpCount = 0;
         animator.SetBool("IsJumpingDown", false);
     }
 }
