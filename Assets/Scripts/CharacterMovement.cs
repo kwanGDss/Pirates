@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     private float lastHorizonalInput = 0f;
     private bool isJumping = false;
     private int jumpCount = 0;
+    private bool isDead = false;
+
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -104,5 +106,27 @@ public class PlayerMovement : MonoBehaviour
         isJumping = false;
         jumpCount = 0;
         animator.SetBool("IsJumpingDown", false);
+        animator.SetBool("IsJumpingDown", false);
+        animator.SetBool("IsDoubleJumping", false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Trap"))
+        {
+            Debug.Log("Check Trap");
+        }   
+    }
+
+    private bool IsGrounded()
+    {
+        float extraHeightText = 0.1f;
+        Vector2 rayStart = rb.position + new Vector2(0, -0.5f);
+        Vector2 rayEnd = rayStart + Vector2.down * extraHeightText;
+
+        Debug.DrawLine(rayStart, rayEnd, Color.red);
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(rayStart, Vector2.down, extraHeightText);
+        return raycastHit.collider != null;
     }
 }
