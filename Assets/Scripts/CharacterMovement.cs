@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Trap"))
         {
-            Debug.Log("Check Trap");
+            animator.SetBool("IsDead", true);
         }   
     }
 
